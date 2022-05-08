@@ -1,5 +1,10 @@
 package collection
 
+type KV[K comparable, T any] struct {
+	Key K
+	Value T
+}
+
 func MapKeys[K comparable, T any](source map[K]T) []K {
 	var result = make([]K, 0, len(source))
 	for key := range source {
