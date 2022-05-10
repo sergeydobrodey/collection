@@ -55,3 +55,19 @@ func Flatten[T any](source [][]T) []T {
 
 	return result
 }
+
+// Duplicates returns elements that occur in collection more than once
+func Duplicates[T comparable](source []T) []T {
+	var asMap = make(map[T]struct{}, len(source))
+	var result = make([]T, 0, len(source))
+
+	Each(source, func(v T) {
+		if _, ok := asMap[v]; ok {
+			result = append(result, v)
+		}
+
+		asMap[v] = struct{}{}
+	})
+
+	return Distinct(result)
+}
