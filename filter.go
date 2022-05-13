@@ -48,11 +48,5 @@ func Distinct[T comparable](source []T) []T {
 // Difference finds a set difference between a and b
 // (values that are in a but not in b or a-b).
 func Difference[T comparable](a []T, b []T) []T {
-	var bMap = make(map[T]struct{}, len(b))
-
-	for _, v := range b {
-		bMap[v] = struct{}{}
-	}
-
 	return FilterBy(a, InFilter(b, false))
 }
