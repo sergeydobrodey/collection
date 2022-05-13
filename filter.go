@@ -2,7 +2,7 @@ package collection
 
 type Filter[T any] func(T) bool
 
-func InFilter[T comparable](source []T) Filter[T] {
+func InFilter[T comparable](source []T, present bool) Filter[T] {
 	var set = make(map[T]struct{}, len(source))
 	for _, v := range source {
 		set[v] = struct{}{}
@@ -10,7 +10,7 @@ func InFilter[T comparable](source []T) Filter[T] {
 
 	return func(item T) bool {
 		_, ok := set[item]
-		return ok
+		return ok == present
 	}
 }
 
@@ -48,14 +48,11 @@ func Distinct[T comparable](source []T) []T {
 // Difference finds a set difference between a and b
 // (values that are in a but not in b or a-b).
 func Difference[T comparable](a []T, b []T) []T {
-	var (
-		ok   bool
-		bMap = SliceToMap(b, func(t T) T { return t })
-	)
+	var bMap = make(map[T]struct{}, len(b))
 
-	return FilterBy(a, func(t T) bool {
-		_, ok = bMap[t]
-		// we need a elements that are not in B
-		return !ok
-	})
+	for _, v := range b {
+		bMap[v] = struct{}{}
+	}
+
+	return FilterBy(a, InFilter(b, false))
 }
