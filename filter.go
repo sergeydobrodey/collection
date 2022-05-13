@@ -44,3 +44,18 @@ func Distinct[T comparable](source []T) []T {
 
 	return MapKeys(set)
 }
+
+// Difference finds a set difference between a and b
+// (values that are in a but not in b or a-b).
+func Difference[T comparable](a []T, b []T) []T {
+	var (
+		ok   bool
+		bMap = SliceToMap(b, func(t T) T { return t })
+	)
+
+	return Distinct(FilterBy(a, func(t T) bool {
+		_, ok = bMap[t]
+		// we need a elements that are not in B
+		return !ok
+	}))
+}
