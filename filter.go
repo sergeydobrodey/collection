@@ -53,9 +53,9 @@ func Difference[T comparable](a []T, b []T) []T {
 		bMap = SliceToMap(b, func(t T) T { return t })
 	)
 
-	return Distinct(FilterBy(a, func(t T) bool {
+	return FilterBy(a, func(t T) bool {
 		_, ok = bMap[t]
 		// we need a elements that are not in B
 		return !ok
-	}))
+	})
 }

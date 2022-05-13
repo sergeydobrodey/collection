@@ -14,7 +14,7 @@ func TestDifference(t *testing.T) {
 		}{
 			{want: []string{"a"}, a: []string{"a", "b"}, b: []string{"b"}},
 			{want: []string{}, a: []string{"a", "b"}, b: []string{"b", "a"}},
-			{want: []string{"a"}, a: []string{"a", "a", "b"}, b: []string{"b"}},
+			{want: []string{"a", "a"}, a: []string{"a", "a", "b"}, b: []string{"b"}},
 			{want: []string{}, a: []string{}},
 		}
 		res []string
