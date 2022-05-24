@@ -37,12 +37,19 @@ func MapFilterBy[K comparable, T any](source map[K]T, filter func(key K, value T
 }
 
 func Distinct[T comparable](source []T) []T {
-	var set = make(map[T]struct{}, len(source))
+	var (
+		set    = make(map[T]struct{}, len(source))
+		result = make([]T, 0, len(source))
+	)
+
 	for _, v := range source {
-		set[v] = struct{}{}
+		if _, ok := set[v]; !ok {
+			set[v] = struct{}{}
+			result = append(result, v)
+		}
 	}
 
-	return MapKeys(set)
+	return result
 }
 
 // Difference finds a set difference between a and b
