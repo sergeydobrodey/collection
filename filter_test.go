@@ -29,6 +29,32 @@ func TestDifference(t *testing.T) {
 	}
 }
 
+func TestIntersection(t *testing.T) {
+	var (
+		cases = []struct {
+			want []string
+			a    []string
+			b    []string
+		}{
+			{want: []string{}, a: []string{}, b: []string{}},
+			{want: []string{"b"}, a: []string{"a", "b"}, b: []string{"b"}},
+			{want: []string{"a", "b"}, a: []string{"a", "b"}, b: []string{"b", "a"}},
+			{want: []string{"b"}, a: []string{"a", "a", "b"}, b: []string{"b"}},
+			{want: []string{"a", "b"}, a: []string{"a", "a", "b"}, b: []string{"b", "b", "a", "a", "c"}},
+			{want: []string{"b", "a"}, a: []string{"b", "b", "a", "a", "c"}, b: []string{"a", "a", "b"}},
+		}
+		res []string
+	)
+
+	for idx, testCase := range cases {
+		res = Intersection(testCase.a, testCase.b)
+
+		if !reflect.DeepEqual(res, testCase.want) {
+			t.Fatalf("%v != %v, test case: %d", res, testCase.want, idx)
+		}
+	}
+}
+
 func TestDistinct(t *testing.T) {
 	var (
 		cases = []struct {
