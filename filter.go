@@ -57,3 +57,9 @@ func Distinct[T comparable](source []T) []T {
 func Difference[T comparable](a []T, b []T) []T {
 	return FilterBy(a, InFilter(b, false))
 }
+
+// Intersection finds a set intersection between a and b
+// (unique values that are in a and in b).
+func Intersection[T comparable](a []T, b []T) []T {
+	return Distinct(FilterBy(a, InFilter(b, true)))
+}
