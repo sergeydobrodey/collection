@@ -1,7 +1,10 @@
 package collection
 
-import "golang.org/x/exp/constraints"
+import (
+	"golang.org/x/exp/constraints"
+)
 
+// Min returns the smaller of x or y.
 func Min[T constraints.Ordered](l T, r T) T {
 	if l <= r {
 		return l
@@ -10,6 +13,7 @@ func Min[T constraints.Ordered](l T, r T) T {
 	return r
 }
 
+// Max returns the larger of x or y.
 func Max[T constraints.Ordered](l T, r T) T {
 	if l >= r {
 		return l
@@ -18,6 +22,7 @@ func Max[T constraints.Ordered](l T, r T) T {
 	return r
 }
 
+// MinOf returns the smallest value among the provided elements or zero value
 func MinOf[T constraints.Ordered](elements ...T) T {
 	if len(elements) == 0 {
 		var zero T
@@ -34,6 +39,7 @@ func MinOf[T constraints.Ordered](elements ...T) T {
 	return min
 }
 
+// MaxOf returns the largest value among the provided elements or zero value
 func MaxOf[T constraints.Ordered](elements ...T) T {
 	if len(elements) == 0 {
 		var zero T

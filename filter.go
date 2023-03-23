@@ -2,6 +2,7 @@ package collection
 
 type Filter[T any] func(T) bool
 
+// InFilter returns a filter function that filters elements based on whether they are present or absent in the given slice.
 func InFilter[T comparable](source []T, present bool) Filter[T] {
 	var set = make(map[T]struct{}, len(source))
 	for _, v := range source {
@@ -14,6 +15,7 @@ func InFilter[T comparable](source []T, present bool) Filter[T] {
 	}
 }
 
+// FilterBy returns a new slice with only the elements that satisfy the given filter function.
 func FilterBy[T any](source []T, filter Filter[T]) []T {
 	var result = make([]T, 0, len(source))
 	for _, item := range source {
@@ -25,6 +27,7 @@ func FilterBy[T any](source []T, filter Filter[T]) []T {
 	return result
 }
 
+// MapFilterBy returns a new map with only the key-value pairs that satisfy the given filter function.
 func MapFilterBy[K comparable, T any](source map[K]T, filter func(key K, value T) bool) map[K]T {
 	var result = make(map[K]T, len(source))
 	for key, value := range source {
@@ -36,6 +39,7 @@ func MapFilterBy[K comparable, T any](source map[K]T, filter func(key K, value T
 	return result
 }
 
+// Distinct returns a new slice with all duplicate elements removed.
 func Distinct[T comparable](source []T) []T {
 	var (
 		set    = make(map[T]struct{}, len(source))
