@@ -1,8 +1,10 @@
-package collection
+package collection_test
 
 import (
 	"reflect"
 	"testing"
+
+	"github.com/sergeydobrodey/collection"
 )
 
 func TestDuplicates(t *testing.T) {
@@ -18,7 +20,7 @@ func TestDuplicates(t *testing.T) {
 	)
 
 	for idx, testCase := range cases {
-		res = Duplicates(testCase.a)
+		res = collection.Duplicates(testCase.a)
 
 		if !reflect.DeepEqual(res, testCase.want) {
 			t.Fatalf("%v != %v, test case: %d", res, testCase.want, idx)
