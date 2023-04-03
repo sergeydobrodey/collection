@@ -64,15 +64,14 @@ func Flatten[T any](source [][]T) []T {
 
 // Duplicates returns a new slice with all elements that appear more than once in the original slice.
 func Duplicates[T comparable](source []T) []T {
-	var asMap = make(map[T]struct{}, len(source))
-	var result = make([]T, 0, len(source))
-
-	Each(source, func(v T) {
-		if _, ok := asMap[v]; ok {
-			result = append(result, v)
+	var visited = make(map[T]struct{}, len(source))
+	var result = FilterBy(source, func(v T) bool {
+		if _, ok := visited[v]; ok {
+			return true
 		}
 
-		asMap[v] = struct{}{}
+		visited[v] = struct{}{}
+		return false
 	})
 
 	return Distinct(result)

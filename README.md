@@ -42,6 +42,8 @@ This package provides several functions for working with collections:
 *   `MapValues[K comparable, T any](source map[K]T) []T`
 *   `MaxOf[T constraints.Ordered](elements ...T) T`
 *   `Max[T constraints.Ordered](l T, r T) T`
+*   `ChannelsMerge[T any](args ...<-chan T) <-chan T`
+*   `ChannelsReadonly[T any](args ...chan T) []<-chan T`  
 *   `MinOf[T constraints.Ordered](elements ...T) T`
 *   `Min[T constraints.Ordered](l T, r T) T`
 *   `Reverse[T any](source []T)`
