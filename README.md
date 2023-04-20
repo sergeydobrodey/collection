@@ -1,6 +1,6 @@
 # Collections
 
-This is a Go package that provides several utility functions for working with collections.
+Collections is a Go package that provides an extensive collection of utility functions and a thread-safe map for working with collections. It includes a variety of functions such as filtering, mapping, sorting, and merging, as well as methods for accessing and modifying a map concurrently. Install the package with a simple `go get` command and import it into your project. Get started with the list of functions provided and streamline your collection-based workloads today!
 
 ## Installation
 
@@ -16,12 +16,18 @@ go get github.com/sergeydobrodey/collection
 import "github.com/sergeydobrodey/collection"
 ```
 
+### Documentation
+
+Documentation is hosted at https://pkg.go.dev/github.com/sergeydobrodey/collection.
+
 ### Collection Functions
 
 This package provides several functions for working with collections:
 
 *   `Aggregate[T, K any](source []T, aggregator func(K, T) K) K`
 *   `Any[T any](source []T, predicate func(T) bool) bool`
+*   `ChannelsMerge[T any](args ...<-chan T) <-chan T`
+*   `ChannelsReadonly[T any](args ...chan T) []<-chan T`
 *   `Contains[T comparable](source []T, item T) bool`
 *   `Difference[T comparable](a []T, b []T) []T`
 *   `Distinct[T comparable](source []T) []T`
