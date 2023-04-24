@@ -20,6 +20,42 @@ import "github.com/sergeydobrodey/collection"
 
 Documentation is hosted at https://pkg.go.dev/github.com/sergeydobrodey/collection.
 
+### Examples
+```golang
+package main
+
+import (
+	"fmt"
+
+	"github.com/sergeydobrodey/collection"
+)
+
+type User struct {
+	id   uint
+	name string
+}
+
+func (u User) ID() uint {
+	return u.id
+}
+
+func (u User) Name() string {
+	return u.name
+}
+
+func main() {
+	var users = []User{{0, "Rob"}, {1, "Ken"}}
+
+	var names = collection.TransformBy(users, User.Name)
+	fmt.Println(names)
+	// Output: [Rob Ken]
+
+	var usersByID = collection.SliceToMap(users, User.ID)
+	fmt.Println(usersByID)
+	// Output: map[0:{0 Rob} 1:{1 Ken}]
+}
+```
+
 ### Collection Functions
 
 This package provides several functions for working with collections:
