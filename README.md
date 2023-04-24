@@ -21,6 +21,7 @@ import "github.com/sergeydobrodey/collection"
 Documentation is hosted at https://pkg.go.dev/github.com/sergeydobrodey/collection.
 
 ### Examples
+#### Slice transformations
 ```golang
 package main
 
@@ -53,6 +54,60 @@ func main() {
 	var usersByID = collection.SliceToMap(users, User.ID)
 	fmt.Println(usersByID)
 	// Output: map[0:{0 Rob} 1:{1 Ken}]
+}
+```
+
+#### Channels aggregation
+```golang
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/sergeydobrodey/collection"
+)
+
+type Worker interface {
+	Run(context.Context)
+	Done() <-chan struct{}
+}
+
+func NewWorker() Worker {
+	return &worker{
+		done: make(chan struct{}),
+	}
+}
+
+type worker struct {
+	done chan struct{}
+}
+
+func (w *worker) Done() <-chan struct{} {
+	return w.done
+}
+
+func (w *worker) Run(ctx context.Context) {
+	defer close(w.done)
+
+	<-ctx.Done()
+}
+
+func main() {
+	var ctx, cancel = context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	var worker1 = NewWorker()
+	go worker1.Run(ctx)
+
+	var worker2 = NewWorker()
+	go worker2.Run(ctx)
+
+	var allWorkersDone = collection.ChannelsMerge(worker1.Done(), worker2.Done())
+	<-allWorkersDone
+
+	fmt.Println("all workers finished")
 }
 ```
 
