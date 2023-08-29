@@ -7,7 +7,7 @@ import (
 )
 
 func TestMin(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		name string
 		l    int
 		r    int
@@ -18,7 +18,7 @@ func TestMin(t *testing.T) {
 		{name: "same numbers", l: 10, r: 10, want: 10},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.Min(tc.l, tc.r)
 			if got != tc.want {
@@ -29,7 +29,7 @@ func TestMin(t *testing.T) {
 }
 
 func TestMax(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		name string
 		l    int
 		r    int
@@ -40,7 +40,7 @@ func TestMax(t *testing.T) {
 		{name: "same numbers", l: 10, r: 10, want: 10},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.Max(tc.l, tc.r)
 			if got != tc.want {
@@ -51,7 +51,7 @@ func TestMax(t *testing.T) {
 }
 
 func TestMinOf(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		name     string
 		elements []int
 		want     int
@@ -62,7 +62,7 @@ func TestMinOf(t *testing.T) {
 		{name: "empty slice", elements: []int{}, want: 0},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.MinOf(tc.elements...)
 			if got != tc.want {
@@ -73,7 +73,7 @@ func TestMinOf(t *testing.T) {
 }
 
 func TestMaxOf(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		name     string
 		elements []int
 		want     int
@@ -84,7 +84,7 @@ func TestMaxOf(t *testing.T) {
 		{name: "empty slice", elements: []int{}, want: 0},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.MinOf(tc.elements...)
 			if got != tc.want {

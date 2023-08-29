@@ -17,6 +17,21 @@ func TransformManyBy[T, K any](source []T, transform func(T) []K) []K {
 	return Flatten(many)
 }
 
+// TryTransformBy tries to transform the source slice of type T to a new slice of type K using the provided transform function.
+func TryTransformBy[T, K any](source []T, transform func(T) (K, error)) ([]K, error) {
+	var result = make([]K, len(source))
+	for i, item := range source {
+		var value, err = transform(item)
+		if err != nil {
+			return nil, err
+		}
+
+		result[i] = value
+	}
+
+	return result, nil
+}
+
 // MapTransformBy transform the values of the source map of type T1 to a new map of type T2 using the provided transform function.
 func MapTransformBy[K comparable, T1, T2 any](source map[K]T1, transform func(T1) T2) map[K]T2 {
 	var result = make(map[K]T2, len(source))

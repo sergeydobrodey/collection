@@ -5,25 +5,25 @@ import (
 )
 
 func TestEqualSet(t *testing.T) {
-	var (
-		cases = []struct {
-			want bool
-			a    []string
-			b    []string
-		}{
-			{want: true, a: []string{}, b: []string{}},
-			{want: false, a: []string{"a", "b"}, b: []string{"a"}},
-			{want: true, a: []string{"a", "b", "a", "a"}, b: []string{"a", "b"}},
-			{want: true, a: []string{"a", "b", "c"}, b: []string{"b", "a", "c"}},
-		}
-		res bool
-	)
+	cases := []struct {
+		name string
+		want bool
+		a    []string
+		b    []string
+	}{
+		{name: "empty", want: true, a: []string{}, b: []string{}},
+		{name: "a-b <-> a", want: false, a: []string{"a", "b"}, b: []string{"a"}},
+		{name: "a-b-a-a <-> a-b", want: true, a: []string{"a", "b", "a", "a"}, b: []string{"a", "b"}},
+		{name: "a-b-c <-> b-a-c", want: true, a: []string{"a", "b", "c"}, b: []string{"b", "a", "c"}},
+	}
 
-	for idx, testCase := range cases {
-		res = equalSet(testCase.a, testCase.b)
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := equalSet(tc.a, tc.b)
 
-		if res != testCase.want {
-			t.Fatalf("%v != %v, test case: %d", res, testCase.want, idx)
-		}
+			if got != tc.want {
+				t.Errorf("equalSet(%v,%v) = %v, want %v", tc.a, tc.b, got, tc.want)
+			}
+		})
 	}
 }

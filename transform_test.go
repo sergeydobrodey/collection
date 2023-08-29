@@ -19,11 +19,11 @@ func TestDuplicates(t *testing.T) {
 		res []string
 	)
 
-	for idx, testCase := range cases {
-		res = collection.Duplicates(testCase.a)
+	for _, tc := range cases {
+		res = collection.Duplicates(tc.a)
 
-		if !reflect.DeepEqual(res, testCase.want) {
-			t.Fatalf("%v != %v, test case: %d", res, testCase.want, idx)
+		if !reflect.DeepEqual(res, tc.want) {
+			t.Errorf("%v != %v", res, tc.want)
 		}
 	}
 }

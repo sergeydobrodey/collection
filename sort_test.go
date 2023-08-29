@@ -8,7 +8,7 @@ import (
 )
 
 func TestSort(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		source []int
 		want   []int
 	}{
@@ -17,7 +17,7 @@ func TestSort(t *testing.T) {
 		{[]int{1, 1, 1, 1, 1}, []int{1, 1, 1, 1, 1}},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		collection.Sort(tc.source)
 		if !reflect.DeepEqual(tc.source, tc.want) {
 			t.Errorf("Sort(%v) = %v, want %v", tc.source, tc.source, tc.want)
@@ -26,7 +26,7 @@ func TestSort(t *testing.T) {
 }
 
 func TestSortBy(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		source []string
 		less   func(l, r string) bool
 		want   []string
@@ -35,7 +35,7 @@ func TestSortBy(t *testing.T) {
 		{[]string{"aaa", "bb", "c", "dddddd"}, func(l, r string) bool { return len(l) < len(r) }, []string{"c", "bb", "aaa", "dddddd"}},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		collection.SortBy(tc.source, tc.less)
 		if !reflect.DeepEqual(tc.source, tc.want) {
 			t.Errorf("SortBy(%v) = %v, want %v", tc.source, tc.source, tc.want)
@@ -44,7 +44,7 @@ func TestSortBy(t *testing.T) {
 }
 
 func TestReverse(t *testing.T) {
-	testCases := []struct {
+	cases := []struct {
 		source []int
 		want   []int
 	}{
@@ -53,7 +53,7 @@ func TestReverse(t *testing.T) {
 		{[]int{1, 1, 1, 1, 1}, []int{1, 1, 1, 1, 1}},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range cases {
 		collection.Reverse(tc.source)
 		if !reflect.DeepEqual(tc.source, tc.want) {
 			t.Errorf("Reverse(%v) = %v, want %v", tc.source, tc.source, tc.want)

@@ -120,6 +120,7 @@ This package provides several functions for working with collections:
 *   `ChannelsMerge[T any](args ...<-chan T) <-chan T`
 *   `ChannelsReadonly[T any](args ...chan T) []<-chan T`
 *   `Contains[T comparable](source []T, item T) bool`
+*   `Copy[T any](source []T) []T`
 *   `Difference[T comparable](a []T, b []T) []T`
 *   `Distinct[T comparable](source []T) []T`
 *   `Duplicates[T comparable](source []T) []T`
@@ -149,6 +150,7 @@ This package provides several functions for working with collections:
 *   `Sort[T constraints.Ordered](source []T)`
 *   `TransformBy[T, K any](source []T, transform func(T) K) []K`
 *   `TransformManyBy[T, K any](source []T, transform func(T) []K) []K`
+*   `TryTransformBy[T, K any](source []T, transform func(T) (K, error)) ([]K, error)`
 
 
 ### SyncMap
