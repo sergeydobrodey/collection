@@ -56,6 +56,25 @@ func Distinct[T comparable](source []T) []T {
 	return result
 }
 
+// DistinctBy returns a new slice with all duplicate elements removed.
+func DistinctBy[T any](source []T, equals func(left T, right T) bool) []T {
+	var result = make([]T, 0, len(source))
+
+sourceLoop:
+	for _, v := range source {
+		for i, u := range result {
+			if equals(v, u) {
+				result[i] = v
+				continue sourceLoop
+			}
+		}
+
+		result = append(result, v)
+	}
+
+	return result
+}
+
 // Difference finds a set difference between a and b
 // (values that are in a but not in b or a-b).
 func Difference[T comparable](a []T, b []T) []T {

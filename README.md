@@ -123,6 +123,7 @@ This package provides several functions for working with collections:
 *   `Copy[T any](source []T) []T`
 *   `Difference[T comparable](a []T, b []T) []T`
 *   `Distinct[T comparable](source []T) []T`
+*   `DistinctBy[T any](source []T, equals func(left T, right T) bool) []T`
 *   `Duplicates[T comparable](source []T) []T`
 *   `Each[T any](source []T, do func(T))`
 *   `FilterBy[T any](source []T, filter Filter[T]) []T`
