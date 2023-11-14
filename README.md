@@ -127,7 +127,6 @@ This package provides several functions for working with collections:
 *   `Duplicates[T comparable](source []T) []T`
 *   `Each[T any](source []T, do func(T))`
 *   `Equal[T ~[]E, E comparable](s1, s2 T) bool`
-*   `EqualMap[M1, M2 ~map[K]V, K, V comparable](m1 M1, m2 M2) bool`
 *   `FilterBy[T any](source []T, filter Filter[T]) []T`
 *   `Filter[T any] func(T) bool`
 *   `Flatten[T any](source [][]T) []T`
@@ -136,6 +135,7 @@ This package provides several functions for working with collections:
 *   `Intersection[T comparable](a []T, b []T) []T`
 *   `MapContains[K comparable, T any](source map[K]T, item K) bool`
 *   `MapEach[K comparable, T any](source map[K]T, do func(key K, value T))`
+*   `MapEqual[M1, M2 ~map[K]V, K, V comparable](m1 M1, m2 M2) bool`
 *   `MapFilterBy[K comparable, T any](source map[K]T, filter func(key K, value T) bool) map[K]T`
 *   `MapKeys[K comparable, T any](source map[K]T) []K`
 *   `MapToSlice[K comparable, T1 any, T2 any](source map[K]T1, transform func(key K, value T1) T2) []T2`
