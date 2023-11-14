@@ -126,6 +126,8 @@ This package provides several functions for working with collections:
 *   `DistinctBy[T any](source []T, equals func(left T, right T) bool) []T`
 *   `Duplicates[T comparable](source []T) []T`
 *   `Each[T any](source []T, do func(T))`
+*   `Equal[T ~[]E, E comparable](s1, s2 T) bool`
+*   `EqualMap[M1, M2 ~map[K]V, K, V comparable](m1 M1, m2 M2) bool`
 *   `FilterBy[T any](source []T, filter Filter[T]) []T`
 *   `Filter[T any] func(T) bool`
 *   `Flatten[T any](source [][]T) []T`
