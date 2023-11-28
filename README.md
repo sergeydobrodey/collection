@@ -116,6 +116,7 @@ func main() {
 This package provides several functions for working with collections:
 
 *   `Aggregate[T, K any](source []T, aggregator func(K, T) K) K`
+*   `All[T any](source []T, predicate func(T) bool) bool`
 *   `Any[T any](source []T, predicate func(T) bool) bool`
 *   `ChannelsMerge[T any](args ...<-chan T) <-chan T`
 *   `ChannelsReadonly[T any](args ...chan T) []<-chan T`
@@ -169,4 +170,3 @@ The `SyncMap` type is a thread-safe map that can be accessed concurrently. It pr
 *   `Range(f func(key K, value V) bool)`
 *   `Store(key K, value V)`
 *   `Swap(key K, value V) (previous V, loaded bool)`
-

@@ -27,3 +27,14 @@ func Any[T any](source []T, predicate func(T) bool) bool {
 
 	return false
 }
+
+// All: Returns true if every element in the slice satisfies the given predicate function.
+func All[T any](source []T, predicate func(T) bool) bool {
+	for _, v := range source {
+		if !predicate(v) {
+			return false
+		}
+	}
+
+	return true
+}
