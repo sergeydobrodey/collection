@@ -155,6 +155,7 @@ This package provides several functions for working with collections:
 *   `TransformBy[T, K any](source []T, transform func(T) K) []K`
 *   `TransformManyBy[T, K any](source []T, transform func(T) []K) []K`
 *   `TryTransformBy[T, K any](source []T, transform func(T) (K, error)) ([]K, error)`
+*   `TryMapTransformBy[K comparable, T1, T2 any](source map[K]T1, transform func(T1) (T2, error)) (map[K]T2, error)`
 
 
 ### SyncMap

@@ -42,6 +42,21 @@ func MapTransformBy[K comparable, T1, T2 any](source map[K]T1, transform func(T1
 	return result
 }
 
+// TryMapTransformBy attempts to transform the values of the source map of type T1 to a new map of type T2 using the provided transform function.
+func TryMapTransformBy[K comparable, T1, T2 any](source map[K]T1, transform func(T1) (T2, error)) (map[K]T2, error) {
+	var result = make(map[K]T2, len(source))
+	for k, v := range source {
+		var value, err = transform(v)
+		if err != nil {
+			return nil, err
+		}
+
+		result[k] = value
+	}
+
+	return result, nil
+}
+
 // MapToSlice convert the source map of type T1 to a slice of type T2 using the provided transform function on each key-value pair.
 func MapToSlice[K comparable, T1 any, T2 any](source map[K]T1, transform func(key K, value T1) T2) []T2 {
 	var result = make([]T2, 0, len(source))
