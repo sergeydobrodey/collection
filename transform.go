@@ -1,5 +1,11 @@
 package collection
 
+import (
+	"context"
+	"errors"
+	"sync"
+)
+
 // TransformBy transform the source slice of type T to a new slice of type K using the provided transform function.
 func TransformBy[T, K any](source []T, transform func(T) K) []K {
 	var result = make([]K, len(source))
@@ -105,4 +111,56 @@ func Duplicates[T comparable](source []T) []T {
 	})
 
 	return Distinct(result)
+}
+
+// AsyncTryTransformBy tries to async transform the source slice of type T to a new slice of type K using the provided transform function.
+func AsyncTryTransformBy[T, K any](parent context.Context, source []T, transform func(context.Context, T) (K, error)) ([]K, error) {
+	var (
+		resultsCh   = make(chan Pair[K, error], len(source))
+		ctx, cancel = context.WithCancel(parent)
+	)
+
+	defer cancel()
+
+	var wg sync.WaitGroup
+	wg.Add(len(source))
+
+	go func() {
+		wg.Wait()
+		close(resultsCh)
+	}()
+
+	for _, item := range source {
+		go func(item T) {
+			defer wg.Done()
+
+			var response, err = transform(ctx, item)
+			select {
+			case resultsCh <- Pair[K, error]{First: response, Second: err}:
+			case <-ctx.Done():
+			}
+		}(item)
+	}
+
+	var (
+		result = make([]K, 0, len(source))
+		errs   []error
+	)
+
+	for r := range resultsCh {
+		if r.Second != nil {
+			errs = append(errs, r.Second)
+
+			cancel()
+			continue
+		}
+
+		result = append(result, r.First)
+	}
+
+	if err := errors.Join(errs...); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
