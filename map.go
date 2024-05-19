@@ -4,6 +4,11 @@ import (
 	"sync"
 )
 
+type Pair[T any, V any] struct {
+	First  T
+	Second V
+}
+
 type KV[K comparable, T any] struct {
 	Key   K
 	Value T
