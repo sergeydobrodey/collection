@@ -1,5 +1,8 @@
 # Collections
 
+[![godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/sergeydobrodey/collection) [![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/sergeydobrodey/collection/master/LICENSE) [![Build Status](https://github.com/sergeydobrodey/collection/actions/workflows/test.yml/badge.svg)](https://github.com/sergeydobrodey/collection/actions/workflows/test.yml) [![Go Coverage](https://github.com/sergeydobrodey/collection/wiki/coverage.svg)](https://raw.githack.com/wiki/sergeydobrodey/collection/coverage.html)
+
+
 Collections is a Go package that provides an extensive collection of utility functions and a thread-safe map for working with collections. It includes a variety of functions such as filtering, mapping, sorting, and merging, as well as methods for accessing and modifying a map concurrently. Install the package with a simple `go get` command and import it into your project. Get started with the list of functions provided and streamline your collection-based workloads today!
 
 ## Installation
