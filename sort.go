@@ -1,6 +1,8 @@
 package collection
 
 import (
+	"sort"
+
 	"golang.org/x/exp/constraints"
 	"golang.org/x/exp/slices"
 )
@@ -12,7 +14,9 @@ func Sort[T constraints.Ordered](source []T) {
 
 // SortBy sorts the source slice of type T according to the less function provided.
 func SortBy[T any](source []T, less func(l T, r T) bool) {
-	slices.SortFunc(source, less)
+	sort.Slice(source, func(i, j int) bool {
+		return less(source[i], source[j])
+	})
 }
 
 // Reverse reverses the order of the elements in the source slice of type T.
