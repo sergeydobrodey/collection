@@ -23,7 +23,7 @@ func TestContains(t *testing.T) {
 			got := collection.Contains(tc.source, tc.item)
 
 			if got != tc.want {
-				t.Errorf("want %v, got %v", tc.want, got)
+				t.Errorf("Contains(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -46,7 +46,7 @@ func TestMapContains(t *testing.T) {
 			got := collection.MapContains(tc.source, tc.item)
 
 			if got != tc.want {
-				t.Errorf("want %v, got %v", tc.want, got)
+				t.Errorf("MapContains(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -69,7 +69,7 @@ func TestAny(t *testing.T) {
 			got := collection.Any(tc.source, tc.predicate)
 
 			if got != tc.want {
-				t.Errorf("want %v, got %v", tc.want, got)
+				t.Errorf("Any(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -92,7 +92,7 @@ func TestAll(t *testing.T) {
 			got := collection.All(tc.source, tc.predicate)
 
 			if got != tc.want {
-				t.Errorf("want %v, got %v", tc.want, got)
+				t.Errorf("All(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}

@@ -1,8 +1,9 @@
 package collection_test
 
 import (
-	"reflect"
 	"testing"
+
+	"golang.org/x/exp/slices"
 
 	"github.com/sergeydobrodey/collection"
 )
@@ -19,8 +20,9 @@ func TestSort(t *testing.T) {
 
 	for _, tc := range cases {
 		collection.Sort(tc.source)
-		if !reflect.DeepEqual(tc.source, tc.want) {
-			t.Errorf("Sort(%v) = %v, want %v", tc.source, tc.source, tc.want)
+
+		if !slices.Equal(tc.source, tc.want) {
+			t.Errorf("Sort(%v) = %v; want %v", tc.source, tc.source, tc.want)
 		}
 	}
 }
@@ -37,7 +39,8 @@ func TestSortBy(t *testing.T) {
 
 	for _, tc := range cases {
 		collection.SortBy(tc.source, tc.less)
-		if !reflect.DeepEqual(tc.source, tc.want) {
+
+		if !slices.Equal(tc.source, tc.want) {
 			t.Errorf("SortBy(%v) = %v, want %v", tc.source, tc.source, tc.want)
 		}
 	}
@@ -55,7 +58,8 @@ func TestReverse(t *testing.T) {
 
 	for _, tc := range cases {
 		collection.Reverse(tc.source)
-		if !reflect.DeepEqual(tc.source, tc.want) {
+
+		if !slices.Equal(tc.source, tc.want) {
 			t.Errorf("Reverse(%v) = %v, want %v", tc.source, tc.source, tc.want)
 		}
 	}

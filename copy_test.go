@@ -3,6 +3,8 @@ package collection_test
 import (
 	"testing"
 
+	"golang.org/x/exp/slices"
+
 	"github.com/sergeydobrodey/collection"
 )
 
@@ -18,14 +20,9 @@ func TestCopy(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.Copy(tc.source)
-			if len(got) != len(tc.source) {
-				t.Errorf("Copy(%v) = %v, want %v", tc.source, got, tc.source)
-			}
 
-			for i := range tc.source {
-				if tc.source[i] != got[i] {
-					t.Errorf("Copy(%v) = %v, want %v", tc.source, got, tc.source)
-				}
+			if !slices.Equal(got, tc.source) {
+				t.Errorf("Copy(%v) = %v; want %v", tc.source, got, tc.source)
 			}
 		})
 	}
