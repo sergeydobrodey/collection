@@ -367,6 +367,9 @@ func TestMapToSlice(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.MapToSlice(tc.source, tc.transform)
 
+			slices.Sort(got)
+			slices.Sort(tc.want)
+
 			if !slices.Equal(got, tc.want) {
 				t.Errorf("want %v, got %v", tc.want, got)
 			}
