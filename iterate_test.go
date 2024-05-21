@@ -34,6 +34,8 @@ func TestEach(t *testing.T) {
 }
 
 func TestMapEach(t *testing.T) {
+	const basePoint = 2
+
 	cases := []struct {
 		name   string
 		source map[string]int
@@ -42,15 +44,15 @@ func TestMapEach(t *testing.T) {
 	}{
 		{name: "sum", source: map[string]int{"1": 1, "2": 2, "3": 3, "4": 4, "5": 5}, do: func(i *int) func(k string, v int) {
 			return func(k string, v int) { *i += v }
-		}, want: 15 + 2},
+		}, want: 15 + basePoint},
 		{name: "mul", source: map[string]int{"-8": -8, "1": 1, "2": 2, "3": 3}, do: func(i *int) func(k string, v int) {
 			return func(k string, v int) { *i *= v }
-		}, want: -48 * 2},
+		}, want: -48 * basePoint},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := 2
+			result := basePoint
 
 			collection.MapEach(tc.source, tc.do(&result))
 			if result != tc.want {

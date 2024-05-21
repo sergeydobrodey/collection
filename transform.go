@@ -135,10 +135,8 @@ func AsyncTryTransformBy[T, K any](parent context.Context, source []T, transform
 			defer wg.Done()
 
 			var response, err = transform(ctx, item)
-			select {
-			case resultsCh <- Pair[K, error]{First: response, Second: err}:
-			case <-ctx.Done():
-			}
+
+			resultsCh <- Pair[K, error]{First: response, Second: err}
 		}(item)
 	}
 

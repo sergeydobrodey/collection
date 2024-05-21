@@ -61,6 +61,11 @@ func TestSyncMap(t *testing.T) {
 		t.Errorf("LoadAndDelete returned incorrect value. Got (%v, %v), expected (%v, %v).", value, loaded, "one", true)
 	}
 
+	value, loaded = syncMap.LoadAndDelete(1)
+	if loaded || value != "" {
+		t.Errorf("LoadAndDelete returned incorrect value. Got (%v, %v), expected (%v, %v).", value, loaded, "", false)
+	}
+
 	if _, ok := syncMap.Load(1); ok {
 		t.Errorf("LoadAndDelete method failed to delete key. Key 1 still exists.")
 	}
@@ -82,9 +87,14 @@ func TestSyncMap(t *testing.T) {
 		t.Errorf("Range method returned incorrect result. Got (%v, %v), expected (%v, %v).", keys, values, expectedKeys, expectedValues)
 	}
 
-	previous, loaded := syncMap.Swap(4, "new_four")
+	previous, loaded := syncMap.Swap(5, "new_five")
+	if loaded || previous != "" {
+		t.Errorf("Swap method returned incorrect value. Got (%v, %v), expected (%v, %v).", previous, loaded, "", false)
+	}
+
+	previous, loaded = syncMap.Swap(4, "new_four")
 	if !loaded || previous != "four" {
-		t.Errorf("Swap method returned incorrect value. Got (%v, %v), expected (%v, %v).", previous, loaded, "four", false)
+		t.Errorf("Swap method returned incorrect value. Got (%v, %v), expected (%v, %v).", previous, loaded, "four", true)
 	}
 
 	if _, ok := syncMap.Load(4); !ok {
