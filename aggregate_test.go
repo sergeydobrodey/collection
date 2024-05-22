@@ -2,36 +2,33 @@ package collection_test
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/sergeydobrodey/collection"
 )
 
 func TestAggregate(t *testing.T) {
-	type args struct {
+	cases := []struct {
+		name       string
 		source     []int
 		aggregator func(int, int) int
-	}
-
-	cases := []struct {
-		name string
-		args args
-		want int
+		want       int
 	}{
-		{name: "sum", args: args{source: []int{1, 2, 3, 4, 5}, aggregator: func(s int, v int) int { return s + v }}, want: 15},
-		{name: "sum even", args: args{source: []int{1, 2, 3, 4, 5}, aggregator: func(s int, v int) int {
+		{name: "sum", source: []int{1, 2, 3, 4, 5}, aggregator: func(s int, v int) int { return s + v }, want: 15},
+		{name: "sum even", source: []int{1, 2, 3, 4, 5}, aggregator: func(s int, v int) int {
 			if v%2 != 0 {
 				return s
 			}
 
 			return s + v
-		}}, want: 6},
+		}, want: 6},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			if got := collection.Aggregate(tc.args.source, tc.args.aggregator); !reflect.DeepEqual(got, tc.want) {
-				t.Errorf("Aggregate() = %v, want %v", got, tc.want)
+			got := collection.Aggregate(tc.source, tc.aggregator)
+
+			if got != tc.want {
+				t.Errorf("Aggregate(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}

@@ -1,9 +1,10 @@
 package collection_test
 
 import (
-	"reflect"
 	"sort"
 	"testing"
+
+	"golang.org/x/exp/slices"
 
 	"github.com/sergeydobrodey/collection"
 )
@@ -13,9 +14,10 @@ func TestMapKeys(t *testing.T) {
 	keys := collection.MapKeys(source)
 
 	sort.Strings(keys)
-	expected := []string{"a", "b", "c"}
-	if !reflect.DeepEqual(keys, expected) {
-		t.Errorf("MapKeys returned %v, expected %v", keys, expected)
+	want := []string{"a", "b", "c"}
+
+	if !slices.Equal(keys, want) {
+		t.Errorf("MapKeys(%v) = %v; want %v", source, keys, want)
 	}
 }
 
@@ -24,9 +26,10 @@ func TestMapValues(t *testing.T) {
 	values := collection.MapValues(source)
 
 	sort.Ints(values)
-	expected := []int{1, 2, 3}
-	if !reflect.DeepEqual(values, expected) {
-		t.Errorf("MapValues returned %v, expected %v", values, expected)
+	want := []int{1, 2, 3}
+
+	if !slices.Equal(values, want) {
+		t.Errorf("MapValues(%v) = %v; want %v", source, values, want)
 	}
 }
 
@@ -83,7 +86,7 @@ func TestSyncMap(t *testing.T) {
 	sort.Ints(keys)
 	sort.Strings(values)
 
-	if !reflect.DeepEqual(expectedKeys, expectedKeys) || !reflect.DeepEqual(values, expectedValues) {
+	if !slices.Equal(keys, expectedKeys) || !slices.Equal(values, expectedValues) {
 		t.Errorf("Range method returned incorrect result. Got (%v, %v), expected (%v, %v).", keys, values, expectedKeys, expectedValues)
 	}
 

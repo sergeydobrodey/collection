@@ -1,9 +1,11 @@
 package collection_test
 
 import (
-	"reflect"
 	"strings"
 	"testing"
+
+	"golang.org/x/exp/maps"
+	"golang.org/x/exp/slices"
 
 	"github.com/sergeydobrodey/collection"
 )
@@ -24,7 +26,8 @@ func TestDifference(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.Difference(tc.a, tc.b)
-			if !reflect.DeepEqual(got, tc.want) {
+
+			if !slices.Equal(got, tc.want) {
 				t.Errorf("Difference(%v, %v) = %v, want %v", tc.a, tc.b, got, tc.want)
 			}
 		})
@@ -49,7 +52,8 @@ func TestIntersection(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.Intersection(tc.a, tc.b)
-			if !reflect.DeepEqual(got, tc.want) {
+
+			if !slices.Equal(got, tc.want) {
 				t.Errorf("Intersection(%v, %v) = %v, want %v", tc.a, tc.b, got, tc.want)
 			}
 		})
@@ -72,7 +76,8 @@ func TestDistinct(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.Distinct(tc.a)
-			if !equalSet(got, tc.want) {
+
+			if !slices.Equal(got, tc.want) {
 				t.Errorf("Distinct(%v) = %v, want %v", tc.a, got, tc.want)
 			}
 		})
@@ -125,8 +130,8 @@ func TestMapFilterBy(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.MapFilterBy(tc.source, tc.filter)
 
-			if !reflect.DeepEqual(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+			if !maps.Equal(got, tc.want) {
+				t.Errorf("MapFilterBy(%v) = want %v, got %v", tc.source, tc.want, got)
 			}
 		})
 	}
@@ -173,8 +178,8 @@ func TestDistinctBy(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.DistinctBy(tc.source, tc.equals)
 
-			if !reflect.DeepEqual(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+			if !slices.Equal(got, tc.want) {
+				t.Errorf("DistinctBy(%v) = want %v, got %v", tc.source, tc.want, got)
 			}
 		})
 	}

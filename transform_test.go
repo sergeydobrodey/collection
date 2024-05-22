@@ -3,7 +3,6 @@ package collection_test
 import (
 	"context"
 	"fmt"
-	"reflect"
 	"strconv"
 	"testing"
 	"time"
@@ -26,10 +25,10 @@ func TestDuplicates(t *testing.T) {
 	)
 
 	for _, tc := range cases {
-		result := collection.Duplicates(tc.source)
+		got := collection.Duplicates(tc.source)
 
-		if !reflect.DeepEqual(result, tc.want) {
-			t.Errorf("Duplicates = %v; want %v", result, tc.want)
+		if !slices.Equal(got, tc.want) {
+			t.Errorf("Duplicates(%v) = %v; want %v", tc.source, got, tc.want)
 		}
 	}
 }
@@ -63,10 +62,10 @@ func TestTransformBy(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			var result = collection.TransformBy(tc.source, tc.transform)
+			got := collection.TransformBy(tc.source, tc.transform)
 
-			if !slices.Equal(result, tc.want) {
-				t.Errorf("TransformBy = %v; want %v", result, tc.want)
+			if !slices.Equal(got, tc.want) {
+				t.Errorf("TransformBy(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -125,8 +124,8 @@ func TestTransformManyBy(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			got := collection.TransformManyBy(tc.source, tc.transform)
 
-			if !reflect.DeepEqual(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+			if !slices.Equal(got, tc.want) {
+				t.Errorf("TransformManyBy(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -198,15 +197,17 @@ func TestAsyncTryTransformBy(t *testing.T) {
 			got, err := collection.AsyncTryTransformBy(ctx, tc.source, tc.transform)
 
 			if tc.wantErr == nil && err != nil {
-				t.Errorf("want error %v, got %v", tc.wantErr, err)
+				t.Errorf("AsyncTryTransformBy(%v) = %v; want %v", tc.source, err, tc.wantErr)
 			}
 
 			if tc.wantErr != nil && (err == nil || tc.wantErr.Error() != err.Error()) {
-				t.Errorf("want error %v, got %v", tc.wantErr, err)
+				t.Errorf("AsyncTryTransformBy(%v) = %v; want %v", tc.source, err, tc.wantErr)
 			}
 
-			if !reflect.DeepEqual(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+			slices.Sort(got)
+
+			if !slices.Equal(got, tc.want) {
+				t.Errorf("AsyncTryTransformBy(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -241,15 +242,15 @@ func TestTryTransformBy(t *testing.T) {
 			got, err := collection.TryTransformBy(tc.source, tc.transform)
 
 			if tc.wantErr == nil && err != nil {
-				t.Errorf("want error %v, got %v", tc.wantErr, err)
+				t.Errorf("TryTransformBy(%v) = %v; want %v", tc.source, err, tc.wantErr)
 			}
 
 			if tc.wantErr != nil && (err == nil || tc.wantErr.Error() != err.Error()) {
-				t.Errorf("want error %v, got %v", tc.wantErr, err)
+				t.Errorf("TryTransformBy(%v) = %v; want %v", tc.source, err, tc.wantErr)
 			}
 
-			if !reflect.DeepEqual(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+			if !slices.Equal(got, tc.want) {
+				t.Errorf("TryTransformBy(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -275,7 +276,7 @@ func TestMapTransformBy(t *testing.T) {
 			got := collection.MapTransformBy(tc.source, tc.transform)
 
 			if !maps.Equal(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+				t.Errorf("MapTransformBy(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -316,15 +317,15 @@ func TestTryMapTransformBy(t *testing.T) {
 			got, err := collection.TryMapTransformBy(tc.source, tc.transform)
 
 			if tc.wantErr == nil && err != nil {
-				t.Errorf("want error %v, got %v", tc.wantErr, err)
+				t.Errorf("TryMapTransformBy(%v) = %v; want %v", tc.source, err, tc.wantErr)
 			}
 
 			if tc.wantErr != nil && (err == nil || tc.wantErr.Error() != err.Error()) {
-				t.Errorf("want error %v, got %v", tc.wantErr, err)
+				t.Errorf("TryMapTransformBy(%v) = %v; want %v", tc.source, err, tc.wantErr)
 			}
 
 			if !maps.Equal(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+				t.Errorf("TryMapTransformBy(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -371,7 +372,7 @@ func TestMapToSlice(t *testing.T) {
 			slices.Sort(tc.want)
 
 			if !slices.Equal(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+				t.Errorf("MapToSlice(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}
@@ -403,7 +404,7 @@ func TestSliceToMap(t *testing.T) {
 			got := collection.SliceToMap(tc.source, tc.keyFunc)
 
 			if !maps.Equal(got, tc.want) {
-				t.Errorf("want %v, got %v", tc.want, got)
+				t.Errorf("SliceToMap(%v) = %v; want %v", tc.source, got, tc.want)
 			}
 		})
 	}

@@ -7,6 +7,8 @@ import (
 )
 
 func TestChannelsMerge(t *testing.T) {
+	const expected = 10
+
 	var sources []chan int
 
 	for i := 0; i < 5; i++ {
@@ -22,9 +24,7 @@ func TestChannelsMerge(t *testing.T) {
 		sum += v
 	}
 
-	const expected = 10
-
 	if sum != expected {
-		t.Errorf("ChannelsMerge returned %v, expected %v", sum, expected)
+		t.Errorf("ChannelsMerge = %v; want %v", sum, expected)
 	}
 }
