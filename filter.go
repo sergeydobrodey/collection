@@ -81,8 +81,30 @@ func Difference[T comparable](a []T, b []T) []T {
 	return FilterBy(a, InFilter(b, false))
 }
 
-// Intersection finds a set intersection between a and b
+// SetIntersection finds a set intersection between a and b
 // (unique values that are in a and in b).
-func Intersection[T comparable](a []T, b []T) []T {
+func SetIntersection[T comparable](a []T, b []T) []T {
 	return Distinct(FilterBy(a, InFilter(b, true)))
+}
+
+// Intersection finds an intersection between a and b
+func Intersection[T comparable](a []T, b []T) []T {
+	var set = make(map[T]int, len(b))
+	for _, v := range b {
+		set[v] += 1
+	}
+
+	var result = make([]T, 0, Min(len(a), len(b)))
+	for _, v := range a {
+		if len(set) == 0 {
+			return result
+		}
+
+		if count, ok := set[v]; count > 0 && ok {
+			result = append(result, v)
+			set[v] -= 1
+		}
+	}
+
+	return result
 }
