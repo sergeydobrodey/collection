@@ -34,7 +34,7 @@ func TestDifference(t *testing.T) {
 	}
 }
 
-func TestIntersection(t *testing.T) {
+func TestSetIntersection(t *testing.T) {
 	cases := []struct {
 		name string
 		want []string
@@ -47,6 +47,34 @@ func TestIntersection(t *testing.T) {
 		{name: "one-2", a: []string{"a", "a", "b"}, b: []string{"b"}, want: []string{"b"}},
 		{name: "local intersection ", a: []string{"a", "a", "b"}, b: []string{"b", "b", "a", "a", "c"}, want: []string{"a", "b"}},
 		{name: "local intersection-2", a: []string{"b", "b", "a", "a", "c"}, b: []string{"a", "a", "b"}, want: []string{"b", "a"}},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := collection.SetIntersection(tc.a, tc.b)
+
+			if !slices.Equal(got, tc.want) {
+				t.Errorf("SetIntersection(%v, %v) = %v, want %v", tc.a, tc.b, got, tc.want)
+			}
+		})
+
+	}
+}
+
+func TestIntersection(t *testing.T) {
+	cases := []struct {
+		name string
+		want []string
+		a    []string
+		b    []string
+	}{
+		{name: "empty", a: []string{}, b: []string{}, want: []string{}},
+		{name: "one", a: []string{"a", "b"}, b: []string{"b"}, want: []string{"b"}},
+		{name: "one to empty", a: []string{"a", "b"}, b: []string{}, want: []string{}},
+		{name: "full intersection", a: []string{"a", "b"}, b: []string{"b", "a"}, want: []string{"a", "b"}},
+		{name: "one-2", a: []string{"a", "a", "b"}, b: []string{"b"}, want: []string{"b"}},
+		{name: "local intersection", a: []string{"a", "a", "b"}, b: []string{"b", "b", "a", "a", "c"}, want: []string{"a", "a", "b"}},
+		{name: "local intersection-2", a: []string{"b", "b", "a", "a", "c"}, b: []string{"a", "a", "b"}, want: []string{"b", "a", "a"}},
 	}
 
 	for _, tc := range cases {
