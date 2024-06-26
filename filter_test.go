@@ -70,6 +70,7 @@ func TestIntersection(t *testing.T) {
 	}{
 		{name: "empty", a: []string{}, b: []string{}, want: []string{}},
 		{name: "one", a: []string{"a", "b"}, b: []string{"b"}, want: []string{"b"}},
+		{name: "one to empty", a: []string{"a", "b"}, b: []string{}, want: []string{}},
 		{name: "full intersection", a: []string{"a", "b"}, b: []string{"b", "a"}, want: []string{"a", "b"}},
 		{name: "one-2", a: []string{"a", "a", "b"}, b: []string{"b"}, want: []string{"b"}},
 		{name: "local intersection", a: []string{"a", "a", "b"}, b: []string{"b", "b", "a", "a", "c"}, want: []string{"a", "a", "b"}},
