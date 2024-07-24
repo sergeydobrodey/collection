@@ -409,3 +409,41 @@ func TestSliceToMap(t *testing.T) {
 		})
 	}
 }
+
+func TestAsyncTransformBy(t *testing.T) {
+	cases := []struct {
+		name      string
+		source    []int
+		transform func(v int) string
+		want      []string
+	}{
+		{
+			name:      "integers to strings",
+			source:    []int{1, 2, 3, 4},
+			transform: strconv.Itoa,
+			want:      []string{"1", "2", "3", "4"},
+		},
+		{
+			name:      "integers to strings of their squares",
+			source:    []int{1, 2, 3, 4},
+			transform: func(n int) string { return strconv.Itoa(n * n) },
+			want:      []string{"1", "4", "9", "16"},
+		},
+		{
+			name:      "an empty slice",
+			source:    []int{},
+			transform: strconv.Itoa,
+			want:      []string{},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := collection.AsyncTransformBy(tc.source, tc.transform)
+
+			if !slices.Equal(got, tc.want) {
+				t.Errorf("TransformBy(%v) = %v; want %v", tc.source, got, tc.want)
+			}
+		})
+	}
+}
