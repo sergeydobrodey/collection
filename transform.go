@@ -113,6 +113,26 @@ func Duplicates[T comparable](source []T) []T {
 	return Distinct(result)
 }
 
+// AsyncTransformBy async transform the source slice of type T to a new slice of type K using the provided transform function.
+func AsyncTransformBy[T, K any](source []T, transform func(T) K) []K {
+	var results = make([]K, len(source))
+
+	var wg sync.WaitGroup
+	wg.Add(len(source))
+
+	for i, item := range source {
+		go func(i int, item T) {
+			defer wg.Done()
+
+			results[i] = transform(item)
+		}(i, item)
+	}
+
+	wg.Wait()
+
+	return results
+}
+
 // AsyncTryTransformBy tries to async transform the source slice of type T to a new slice of type K using the provided transform function.
 func AsyncTryTransformBy[T, K any](parent context.Context, source []T, transform func(context.Context, T) (K, error)) ([]K, error) {
 	var (
