@@ -1,6 +1,8 @@
 package collection
 
 import (
+	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -119,37 +121,17 @@ func compareResults(a, b interface{}) bool {
 	switch a := a.(type) {
 	case []string:
 		b := b.([]string)
-		if len(a) != len(b) {
-			return false
-		}
-		for i, v := range a {
-			if v != b[i] {
-				return false
-			}
-		}
-		return true
+		sort.Strings(a)
+		sort.Strings(b)
+		return reflect.DeepEqual(a, b)
 	case []int:
 		b := b.([]int)
-		if len(a) != len(b) {
-			return false
-		}
-		for i, v := range a {
-			if v != b[i] {
-				return false
-			}
-		}
-		return true
+		sort.Ints(a)
+		sort.Ints(b)
+		return reflect.DeepEqual(a, b)
 	case map[string]int:
 		b := b.(map[string]int)
-		if len(a) != len(b) {
-			return false
-		}
-		for k, v := range a {
-			if v2, ok := b[k]; !ok || v2 != v {
-				return false
-			}
-		}
-		return true
+		return reflect.DeepEqual(a, b)
 	case struct {
 		value int
 		ok    bool
