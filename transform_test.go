@@ -447,3 +447,65 @@ func TestAsyncTransformBy(t *testing.T) {
 		})
 	}
 }
+
+func TestChunkBy(t *testing.T) {
+	cases := []struct {
+		name   string
+		source []int
+		size   int
+		want   [][]int
+	}{
+		{
+			name:   "evenly divisible chunks",
+			source: []int{1, 2, 3, 4, 5, 6},
+			size:   2,
+			want:   [][]int{{1, 2}, {3, 4}, {5, 6}},
+		},
+		{
+			name:   "remainder chunk",
+			source: []int{1, 2, 3, 4, 5},
+			size:   2,
+			want:   [][]int{{1, 2}, {3, 4}, {5}},
+		},
+		{
+			name:   "chunk size larger than source",
+			source: []int{1, 2, 3},
+			size:   5,
+			want:   [][]int{{1, 2, 3}},
+		},
+		{
+			name:   "chunk size equal to source length",
+			source: []int{1, 2, 3},
+			size:   3,
+			want:   [][]int{{1, 2, 3}},
+		},
+		{
+			name:   "empty source slice",
+			source: []int{},
+			size:   3,
+			want:   nil,
+		},
+		{
+			name:   "zero chunk size",
+			source: []int{1, 2, 3},
+			size:   0,
+			want:   nil,
+		},
+		{
+			name:   "negative chunk size",
+			source: []int{1, 2, 3},
+			size:   -1,
+			want:   nil,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := collection.ChunkBy(tc.source, tc.size)
+
+			if !slices.EqualFunc(got, tc.want, slices.Equal[[]int]) {
+				t.Errorf("ChunkBy(%v, %d) = %v; want %v", tc.source, tc.size, got, tc.want)
+			}
+		})
+	}
+}

@@ -125,6 +125,7 @@ This package provides several functions for working with collections:
 *   `AsyncTryTransformBy[T, K any](parent context.Context, source []T, transform func(context.Context, T) (K, error)) ([]K, error)`
 *   `ChannelsMerge[T any](args ...<-chan T) <-chan T`
 *   `ChannelsReadonly[T any](args ...chan T) []<-chan T`
+*   `ChunkBy[T any](source []T, size int) [][]T`
 *   `Contains[T comparable](source []T, item T) bool`
 *   `Copy[T any](source []T) []T`
 *   `Difference[T comparable](a []T, b []T) []T`

@@ -113,6 +113,26 @@ func Duplicates[T comparable](source []T) []T {
 	return Distinct(result)
 }
 
+// ChunkBy divides a slice of Type T into smaller chunks of the specified size.
+func ChunkBy[T any](source []T, size int) [][]T {
+	if size <= 0 || len(source) == 0 {
+		return nil
+	}
+
+	var chunks = make([][]T, 0, len(source)/size)
+
+	for i := 0; i < len(source); i += size {
+		var end = i + size
+		if end > len(source) {
+			end = len(source)
+		}
+
+		chunks = append(chunks, source[i:end])
+	}
+
+	return chunks
+}
+
 // AsyncTransformBy async transform the source slice of type T to a new slice of type K using the provided transform function.
 func AsyncTransformBy[T, K any](source []T, transform func(T) K) []K {
 	var results = make([]K, len(source))
