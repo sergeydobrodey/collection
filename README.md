@@ -155,6 +155,7 @@ This package provides several functions for working with collections:
 *   `MinOf[T constraints.Ordered](elements ...T) T`
 *   `Min[T constraints.Ordered](l T, r T) T`
 *   `Reverse[T any](source []T)`
+*   `SetIntersection[T comparable](a []T, b []T) []T`
 *   `SliceToMap[K comparable, T any](source []T, keyFunc func(T) K) map[K]T`
 *   `SortBy[T any](source []T, less func(l T, r T) bool)`
 *   `Sort[T constraints.Ordered](source []T)`
