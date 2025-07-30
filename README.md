@@ -37,7 +37,7 @@ Transform your data with ease using functional programming patterns:
 
 ```go
 // Transform slice elements
-users := []User{{ID: 1, Name: "Alice"}, {ID: 2, Name: "Bob"}}
+users := []User{{ID: 1, Name: "Alice", Age: 32, Active: false}, {ID: 2, Name: "Bob", Age: 8, Active: true}}
 names := collection.TransformBy(users, func(u User) string { return u.Name })
 // Result: ["Alice", "Bob"]
 
@@ -80,8 +80,8 @@ syncMap.CompareAndSwap("key", 42, 100)
 
 ```go
 // Merge multiple channels elegantly
-worker1Done := make(chan struct{})
-worker2Done := make(chan struct{})
+worker1Done := make(chan struct{}, 128)
+worker2Done := make(chan struct{}, 128)
 allDone := collection.ChannelsMerge(worker1Done, worker2Done)
 
 // Async transformations with context
