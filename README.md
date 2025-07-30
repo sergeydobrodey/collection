@@ -210,8 +210,8 @@ We welcome contributions! Here's how you can help:
 
 1. **🐛 Report Bugs**: Open an issue with reproduction steps
 2. **💡 Feature Requests**: Suggest new utility functions
-4. **📖 Documentation**: Improve examples and documentation
-5. **🧪 Tests**: Add test cases for edge cases
+3. **📖 Documentation**: Improve examples and documentation
+4. **🧪 Tests**: Add test cases for edge cases
 
 ## 📄 License
 
