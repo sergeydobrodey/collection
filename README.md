@@ -56,7 +56,7 @@ activeUserNames := collection.TransformBy(
 ```go
 // Convert slices to maps instantly
 userMap := collection.SliceToMap(users, func(u User) int { return u.ID })
-// Result: map[1:User{1, "Alice"} 2:User{2, "Bob"}]
+// Result: map[1:User{ID: 1, Name: "Alice", Age: 32, Active: false} 2:User{ID: 2, Name: "Bob", Age: 8, Active: true}]
 
 // Transform map values
 uppercaseNames := collection.MapTransformBy(userMap, func(u User) string {
