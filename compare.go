@@ -1,9 +1,10 @@
 package collection
 
 import (
+	"slices"
+
 	"golang.org/x/exp/constraints"
-	"golang.org/x/exp/maps"
-	"golang.org/x/exp/slices"
+	"maps"
 )
 
 // Min returns the smaller of x or y.
@@ -59,7 +60,7 @@ func MaxOf[T constraints.Ordered](elements ...T) T {
 }
 
 // Equal is equal to slices.Equal
-func Equal[T ~[]E, E comparable](s1, s2 T) bool {
+func Equal[S ~[]T, T comparable](s1, s2 S) bool {
 	return slices.Equal(s1, s2)
 }
 
@@ -69,7 +70,7 @@ func MapEqual[M1, M2 ~map[K]V, K, V comparable](m1 M1, m2 M2) bool {
 }
 
 // EqualFunc is equal to slices.EqualFunc
-func EqualFunc[S1 ~[]E1, S2 ~[]E2, E1, E2 any](s1 S1, s2 S2, eq func(E1, E2) bool) bool {
+func EqualFunc[S1 ~[]T1, S2 ~[]T2, T1, T2 any](s1 S1, s2 S2, eq func(T1, T2) bool) bool {
 	return slices.EqualFunc(s1, s2, eq)
 }
 

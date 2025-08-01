@@ -3,7 +3,7 @@ package collection_test
 import (
 	"testing"
 
-	"golang.org/x/exp/slices"
+	"slices"
 
 	"github.com/sergeydobrodey/collection"
 )

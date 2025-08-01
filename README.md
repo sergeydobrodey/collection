@@ -101,6 +101,7 @@ results, err := collection.AsyncTryTransformBy(ctx, urls, fetchData)
 | `Distinct` | Remove duplicates | Unique IDs |
 | `Intersection` | Find common elements | Common interests |
 | `Difference` | Find unique elements | Missing items |
+| `Clone` | Create shallow copy of slice | Safe data manipulation |
 
 ### Validation & Checks
 | Function | Description | Example Use Case |
@@ -118,6 +119,7 @@ results, err := collection.AsyncTryTransformBy(ctx, urls, fetchData)
 | `MapFilterBy` | Filter map entries | Active sessions only |
 | `MapToSlice` | Convert map to slice | Extract values |
 | `MapKeys` / `MapValues` | Extract keys or values | Get all IDs |
+| `MapClone` | Create shallow copy of map | Safe data manipulation |
 | `MapEqualFunc` | Compare maps with custom value equality function | Custom value comparison |
 
 ### Async & Concurrency
