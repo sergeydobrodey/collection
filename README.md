@@ -109,6 +109,7 @@ results, err := collection.AsyncTryTransformBy(ctx, urls, fetchData)
 | `Any` | Check if any element matches predicate | Any errors present |
 | `Contains` | Check if slice contains element | User exists |
 | `Equal` | Compare two slices for equality | Data consistency |
+| `EqualFunc` | Compare slices with custom equality function | Custom comparison logic |
 
 ### Map Operations
 | Function | Description | Example Use Case |
@@ -117,6 +118,7 @@ results, err := collection.AsyncTryTransformBy(ctx, urls, fetchData)
 | `MapFilterBy` | Filter map entries | Active sessions only |
 | `MapToSlice` | Convert map to slice | Extract values |
 | `MapKeys` / `MapValues` | Extract keys or values | Get all IDs |
+| `MapEqualFunc` | Compare maps with custom value equality function | Custom value comparison |
 
 ### Async & Concurrency
 | Function | Description | Example Use Case |

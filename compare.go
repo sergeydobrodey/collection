@@ -67,3 +67,13 @@ func Equal[T ~[]E, E comparable](s1, s2 T) bool {
 func MapEqual[M1, M2 ~map[K]V, K, V comparable](m1 M1, m2 M2) bool {
 	return maps.Equal(m1, m2)
 }
+
+// EqualFunc is equal to slices.EqualFunc
+func EqualFunc[S1 ~[]E1, S2 ~[]E2, E1, E2 any](s1 S1, s2 S2, eq func(E1, E2) bool) bool {
+	return slices.EqualFunc(s1, s2, eq)
+}
+
+// MapEqualFunc is equal to maps.EqualFunc
+func MapEqualFunc[M1 ~map[K]V1, M2 ~map[K]V2, K comparable, V1, V2 any](m1 M1, m2 M2, eq func(V1, V2) bool) bool {
+	return maps.EqualFunc(m1, m2, eq)
+}

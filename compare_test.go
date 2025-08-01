@@ -145,3 +145,169 @@ func TestMapEqual(t *testing.T) {
 		})
 	}
 }
+
+func TestEqualFunc(t *testing.T) {
+	type Person struct {
+		ID   int
+		Name string
+	}
+
+	cases := []struct {
+		name   string
+		s1     []Person
+		s2     []Person
+		equals func(Person, Person) bool
+		want   bool
+	}{
+		{
+			name: "equal by ID",
+			s1:   []Person{{1, "Alice"}, {2, "Bob"}},
+			s2:   []Person{{1, "Alice"}, {2, "Bob"}},
+			equals: func(a, b Person) bool {
+				return a.ID == b.ID
+			},
+			want: true,
+		},
+		{
+			name: "equal by name",
+			s1:   []Person{{1, "Alice"}, {2, "Bob"}},
+			s2:   []Person{{3, "Alice"}, {4, "Bob"}},
+			equals: func(a, b Person) bool {
+				return a.Name == b.Name
+			},
+			want: true,
+		},
+		{
+			name: "different lengths",
+			s1:   []Person{{1, "Alice"}, {2, "Bob"}},
+			s2:   []Person{{1, "Alice"}},
+			equals: func(a, b Person) bool {
+				return a.ID == b.ID
+			},
+			want: false,
+		},
+		{
+			name: "not equal",
+			s1:   []Person{{1, "Alice"}, {2, "Bob"}},
+			s2:   []Person{{1, "Alice"}, {3, "Charlie"}},
+			equals: func(a, b Person) bool {
+				return a.ID == b.ID
+			},
+			want: false,
+		},
+		{
+			name:   "empty slices",
+			s1:     []Person{},
+			s2:     []Person{},
+			equals: func(a, b Person) bool { return a.ID == b.ID },
+			want:   true,
+		},
+		{
+			name:   "nil slices",
+			s1:     nil,
+			s2:     nil,
+			equals: func(a, b Person) bool { return a.ID == b.ID },
+			want:   true,
+		},
+		{
+			name:   "one nil slice",
+			s1:     []Person{{1, "Alice"}},
+			s2:     nil,
+			equals: func(a, b Person) bool { return a.ID == b.ID },
+			want:   false,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := collection.EqualFunc(tc.s1, tc.s2, tc.equals)
+
+			if got != tc.want {
+				t.Errorf("EqualFunc(%v, %v, equals) = %v; want %v", tc.s1, tc.s2, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestMapEqualFunc(t *testing.T) {
+	type Person struct {
+		ID   int
+		Name string
+	}
+
+	cases := []struct {
+		name        string
+		m1          map[int]Person
+		m2          map[int]Person
+		valueEquals func(Person, Person) bool
+		want        bool
+	}{
+		{
+			name: "equal by name",
+			m1:   map[int]Person{1: {1, "Alice"}, 2: {2, "Bob"}},
+			m2:   map[int]Person{1: {3, "Alice"}, 2: {4, "Bob"}},
+			valueEquals: func(a, b Person) bool {
+				return a.Name == b.Name
+			},
+			want: true,
+		},
+		{
+			name: "equal by ID",
+			m1:   map[int]Person{1: {1, "Alice"}, 2: {2, "Bob"}},
+			m2:   map[int]Person{1: {1, "Alice"}, 2: {2, "Bob"}},
+			valueEquals: func(a, b Person) bool {
+				return a.ID == b.ID && a.Name == b.Name
+			},
+			want: true,
+		},
+		{
+			name: "different sizes",
+			m1:   map[int]Person{1: {1, "Alice"}, 2: {2, "Bob"}},
+			m2:   map[int]Person{1: {1, "Alice"}},
+			valueEquals: func(a, b Person) bool {
+				return a.ID == b.ID
+			},
+			want: false,
+		},
+		{
+			name: "not equal values",
+			m1:   map[int]Person{1: {1, "Alice"}, 2: {2, "Bob"}},
+			m2:   map[int]Person{1: {1, "Alice"}, 2: {2, "Charlie"}},
+			valueEquals: func(a, b Person) bool {
+				return a.Name == b.Name
+			},
+			want: false,
+		},
+		{
+			name: "empty maps",
+			m1:   map[int]Person{},
+			m2:   map[int]Person{},
+			valueEquals: func(a, b Person) bool { return a.ID == b.ID },
+			want: true,
+		},
+		{
+			name: "nil maps",
+			m1:   nil,
+			m2:   nil,
+			valueEquals: func(a, b Person) bool { return a.ID == b.ID },
+			want: true,
+		},
+		{
+			name: "one nil map",
+			m1:   map[int]Person{1: {1, "Alice"}},
+			m2:   nil,
+			valueEquals: func(a, b Person) bool { return a.ID == b.ID },
+			want: false,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := collection.MapEqualFunc(tc.m1, tc.m2, tc.valueEquals)
+
+			if got != tc.want {
+				t.Errorf("MapEqualFunc(%v, %v, valueEquals) = %v; want %v", tc.m1, tc.m2, got, tc.want)
+			}
+		})
+	}
+}
