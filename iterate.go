@@ -1,7 +1,7 @@
 package collection
 
 // Each calls the given function for each element in the slice.
-func Each[T any](source []T, do func(T)) {
+func Each[S ~[]T, T any](source S, do func(T)) {
 	for _, v := range source {
 		do(v)
 	}
