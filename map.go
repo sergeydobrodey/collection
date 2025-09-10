@@ -9,6 +9,7 @@ type Pair[T any, V any] struct {
 	Second V
 }
 
+// KV represents a key-value pair from a map operation.
 type KV[K comparable, T any] struct {
 	Key   K
 	Value T
@@ -24,7 +25,7 @@ func MapKeys[K comparable, T any](source map[K]T) []K {
 	return result
 }
 
-// MapValues returns a slice of type T containing the values of the source map of type T, ordered by key.
+// MapValues returns a slice of type T containing the values of the source map of type T. Order is not guaranteed.
 func MapValues[K comparable, T any](source map[K]T) []T {
 	var result = make([]T, 0, len(source))
 	for _, value := range source {
@@ -34,6 +35,8 @@ func MapValues[K comparable, T any](source map[K]T) []T {
 	return result
 }
 
+// SyncMap is a thread-safe map with type-safe operations using generics.
+// It wraps sync.Map and provides type safety for keys and values.
 type SyncMap[K comparable, V any] struct {
 	m sync.Map
 }
@@ -107,3 +110,17 @@ func (m *SyncMap[K, V]) CompareAndSwap(key K, old V, new V) bool {
 func (m *SyncMap[K, V]) CompareAndDelete(key K, old V) (deleted bool) {
 	return m.m.CompareAndDelete(key, old)
 }
+
+// MapFirst returns the first key-value pair from the map that satisfies the given predicate function.
+// Since map iteration order is not guaranteed, "first" means any matching element.
+// The ok result indicates whether a matching element was found in the map.
+func MapFirst[K comparable, T any](source map[K]T, predicate func(key K, value T) bool) (result KV[K, T], ok bool) {
+	for key, value := range source {
+		if predicate(key, value) {
+			return KV[K, T]{Key: key, Value: value}, true
+		}
+	}
+
+	return result, false
+}
+

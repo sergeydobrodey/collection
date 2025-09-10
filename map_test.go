@@ -137,3 +137,185 @@ func TestSyncMapCompareAndSwap(t *testing.T) {
 		t.Errorf("CompareAndDelete(%v) failed to delete value", 2)
 	}
 }
+
+func TestMapFirst(t *testing.T) {
+	cases := []struct {
+		name      string
+		source    map[string]int
+		predicate func(string, int) bool
+		want      collection.KV[string, int]
+		wantOk    bool
+	}{
+		{
+			"Found matching element",
+			map[string]int{"a": 1, "b": 2, "c": 3},
+			func(k string, v int) bool { return v%2 == 0 },
+			collection.KV[string, int]{Key: "b", Value: 2},
+			true,
+		},
+		{
+			"No matching element",
+			map[string]int{"a": 1, "b": 3, "c": 5},
+			func(k string, v int) bool { return v%2 == 0 },
+			collection.KV[string, int]{},
+			false,
+		},
+		{
+			"Empty map",
+			map[string]int{},
+			func(k string, v int) bool { return v > 0 },
+			collection.KV[string, int]{},
+			false,
+		},
+		{
+			"Key-based predicate",
+			map[string]int{"apple": 1, "banana": 2, "cherry": 3},
+			func(k string, v int) bool { return k == "banana" },
+			collection.KV[string, int]{Key: "banana", Value: 2},
+			true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			got, gotOk := collection.MapFirst(tc.source, tc.predicate)
+
+			if gotOk != tc.wantOk {
+				t.Errorf("MapFirst(%v, predicate) ok = %v; want %v", tc.source, gotOk, tc.wantOk)
+				return
+			}
+
+			if got != tc.want {
+				t.Errorf("MapFirst(%v, predicate) = (%v, %v); want (%v, %v)", tc.source, got, gotOk, tc.want, tc.wantOk)
+			}
+		})
+	}
+}
+
+func TestMapFirstMultipleMatches(t *testing.T) {
+	source := map[string]int{"a": 2, "b": 4, "c": 6}
+	predicate := func(k string, v int) bool { return v%2 == 0 }
+	
+	got, ok := collection.MapFirst(source, predicate)
+	
+	if !ok {
+		t.Errorf("MapFirst should return true for multiple matches")
+		return
+	}
+	
+	// Verify the returned value exists in the source map
+	sourceValue, exists := source[got.Key]
+	if !exists {
+		t.Errorf("MapFirst returned key %q that doesn't exist in source map", got.Key)
+		return
+	}
+	
+	// Verify the returned value matches the source
+	if got.Value != sourceValue {
+		t.Errorf("MapFirst returned value %v for key %q; want %v", got.Value, got.Key, sourceValue)
+		return
+	}
+	
+	// Verify the returned pair satisfies the predicate
+	if !predicate(got.Key, got.Value) {
+		t.Errorf("MapFirst returned key-value pair (%q, %v) that doesn't match predicate", got.Key, got.Value)
+	}
+}
+
+func TestMapFirstAnyElement(t *testing.T) {
+	source := map[int]string{1: "one", 2: "two", 3: "three"}
+	
+	got, ok := collection.MapFirst(source, func(k int, v string) bool { return true })
+	
+	if !ok {
+		t.Errorf("MapFirst should return true for any element predicate")
+		return
+	}
+	
+	// Verify the returned element exists in source
+	sourceValue, exists := source[got.Key]
+	if !exists {
+		t.Errorf("MapFirst returned key %d that doesn't exist in source map", got.Key)
+		return
+	}
+	
+	if got.Value != sourceValue {
+		t.Errorf("MapFirst returned value %q for key %d; want %q", got.Value, got.Key, sourceValue)
+	}
+}
+
+func TestMapFirstNilMap(t *testing.T) {
+	var source map[string]int
+	
+	got, ok := collection.MapFirst(source, func(k string, v int) bool { return true })
+	
+	if ok {
+		t.Errorf("MapFirst should return false for nil map, got ok=%v", ok)
+	}
+	
+	// Verify zero value returned
+	if got.Key != "" || got.Value != 0 {
+		t.Errorf("MapFirst should return zero values for nil map, got %+v", got)
+	}
+}
+
+func TestMapFirstExistsOnly(t *testing.T) {
+	source := map[string]int{"a": 5, "b": 15, "c": 25}
+	
+	// Test existence check - only care about ok value
+	_, exists := collection.MapFirst(source, func(k string, v int) bool { return v > 10 })
+	if !exists {
+		t.Errorf("MapFirst should find elements > 10, got exists=%v", exists)
+	}
+	
+	// Test non-existence
+	_, notExists := collection.MapFirst(source, func(k string, v int) bool { return v > 100 })
+	if notExists {
+		t.Errorf("MapFirst should not find elements > 100, got exists=%v", notExists)
+	}
+}
+
+type CustomKey struct {
+	ID   int
+	Name string
+}
+
+type CustomValue struct {
+	Data  string
+	Count int
+}
+
+func TestMapFirstCustomTypes(t *testing.T) {
+	source := map[CustomKey]CustomValue{
+		{ID: 1, Name: "first"}:  {Data: "data1", Count: 10},
+		{ID: 2, Name: "second"}: {Data: "data2", Count: 20},
+		{ID: 3, Name: "third"}:  {Data: "data3", Count: 30},
+	}
+	
+	got, ok := collection.MapFirst(source, func(k CustomKey, v CustomValue) bool {
+		return v.Count > 15
+	})
+	
+	if !ok {
+		t.Errorf("MapFirst should find element with Count > 15")
+		return
+	}
+	
+	// Verify the returned element exists and matches predicate
+	sourceValue, exists := source[got.Key]
+	if !exists {
+		t.Errorf("MapFirst returned key %+v that doesn't exist in source map", got.Key)
+		return
+	}
+	
+	if got.Value != sourceValue {
+		t.Errorf("MapFirst returned value %+v; want %+v", got.Value, sourceValue)
+		return
+	}
+	
+	if got.Value.Count <= 15 {
+		t.Errorf("MapFirst returned element with Count=%d, should be > 15", got.Value.Count)
+	}
+}
+
+

@@ -62,6 +62,28 @@ userMap := collection.SliceToMap(users, func(u User) int { return u.ID })
 uppercaseNames := collection.MapTransformBy(userMap, func(u User) string {
     return strings.ToUpper(u.Name)
 })
+
+// Find first user over 18
+if adult, found := collection.MapFirst(userMap, func(id int, u User) bool { 
+    return u.Age >= 18 
+}); found {
+    fmt.Printf("First adult: %s\n", adult.Value.Name)
+}
+
+// Get any arbitrary user from the map (without specific condition)
+if anyUser, found := collection.MapFirst(userMap, func(id int, u User) bool { 
+    return true // Accept any element
+}); found {
+    fmt.Printf("Got user: %s (ID: %d)\n", anyUser.Value.Name, anyUser.Key)
+}
+
+// Check if any users are active (existence check)
+_, hasActiveUsers := collection.MapFirst(userMap, func(id int, u User) bool { 
+    return u.Active 
+})
+if hasActiveUsers {
+    fmt.Printf("Found at least one active user\n")
+}
 ```
 
 ### 🔒 Thread-Safe Concurrent Operations
@@ -118,9 +140,10 @@ results, err := collection.AsyncTryTransformBy(ctx, urls, fetchData)
 | `MapTransformBy` | Transform map values | Normalize data |
 | `MapFilterBy` | Filter map entries | Active sessions only |
 | `MapToSlice` | Convert map to slice | Extract values |
-| `MapKeys` / `MapValues` | Extract keys or values | Get all IDs |
+| `MapKeys` / `MapValues` | Extract keys or values (order not guaranteed) | Get all IDs |
 | `MapClone` | Create shallow copy of map | Safe data manipulation |
 | `MapEqualFunc` | Compare maps with custom value equality function | Custom value comparison |
+| `MapFirst` | Find first key-value pair matching predicate (order not deterministic) | Get any valid element, check existence, find by condition |
 
 ### Async & Concurrency
 | Function | Description | Example Use Case |
