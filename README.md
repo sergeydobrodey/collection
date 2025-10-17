@@ -41,12 +41,17 @@ users := []User{{ID: 1, Name: "Alice", Age: 32, Active: false}, {ID: 2, Name: "B
 names := collection.TransformBy(users, func(u User) string { return u.Name })
 // Result: ["Alice", "Bob"]
 
+// Use struct methods as transformers
+users := []User{{ID: 1, Name: "Alice", Age: 32, Active: false}, {ID: 2, Name: "Bob", Age: 8, Active: true}}
+names := collection.TransformBy(users, User.GetAge)
+// Result: [32, 8]
+
 // Filter with predicates
 adults := collection.FilterBy(users, func(u User) bool { return u.Age >= 18 })
 
 // Chain operations naturally
 activeUserNames := collection.TransformBy(
-    collection.FilterBy(users, func(u User) bool { return u.Active }),
+    collection.FilterBy(users, User.IsActive),
     func(u User) string { return u.Name },
 )
 ```
