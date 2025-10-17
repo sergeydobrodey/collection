@@ -51,7 +51,7 @@ adults := collection.FilterBy(users, func(u User) bool { return u.Age >= 18 })
 
 // Chain operations naturally
 activeUserNames := collection.TransformBy(
-    collection.FilterBy(users, func(u User) bool { return u.Active }),
+    collection.FilterBy(users, User.IsActive),
     func(u User) string { return u.Name },
 )
 ```
